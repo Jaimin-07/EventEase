@@ -1,0 +1,105 @@
+﻿@model EventViewModel
+@{
+    ViewData["Title"] = "View Details";
+}
+
+<div class="event-wrapper container py-4">
+    <hr />
+    <div class="row pt-3">
+        <div class="col-md-6 mb-3">
+            <h4 class="text-primary">Event Description</h4>
+            @if (Model.Description != null)
+            {
+                <p class="text-muted">@Model.Description</p>
+            }
+            else
+            {
+                <p class="text-muted">No Description available</p>
+            }
+
+            <h5 class="mt-4 text-secondary">Other Details</h5>
+            @if (Model.OtherDetails != null)
+            {
+                <p class="text-muted">@Model.OtherDetails</p>
+            }
+            else
+            {
+                <p class="text-muted">No additional details</p>
+            }
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><i class="fa-solid fa-calendar-alt me-2"></i> <strong>Date:</strong> @Model.Date.ToShortDateString()</li>
+                    @if (Model.StartTime != null)
+
+                    {
+                        <li class="list-group-item"><i class="fa-solid fa-clock me-2"></i> <strong>Start Time:</strong> @Model.StartTime.ToShortTimeString()</li>
+                    }
+                    <li class="list-group-item"><i class="fa-solid fa-location-dot me-2"></i> <strong>Location:</strong> @Model.Location</li>
+                    @if (Model.DurationInHours != null)
+
+                    {
+                        <li class="list-group-item"><i class="fa-solid fa-stopwatch me-2"></i> <strong>Duration:</strong> @Model.DurationInHours hours</li>
+                    }
+                    <li class="list-group-item"><i class="fa-solid fa-lock me-2"></i> <strong>Type:</strong> @Model.Type</li>
+                    @if (Model.InviteByEmail != null)
+
+                    {
+
+                        var count = Model.InviteByEmail.Split(',').Count();
+                        <li class="list-group-item"><i class="fa-solid fa-user-group me-2"></i> <strong>Total Invitees:</strong> @count</li>
+                    }
+                    <li class="list-group-item"><i class="fa-solid fa-user-tie me-2"></i> <strong>Organiser:</strong> @Model.Organiser</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row py-4">
+        <div class="col">
+            <h2 class="text-primary">Comments</h2>
+            <hr />
+            <div class="row">
+                <div class="col-md-6">
+                    @using (Html.BeginForm("PostComment", "Comment", new { EventId = Model.Id }))
+
+                    {
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://image.ibb.co/jw55Ex/def_face.jpg" class="img-fluid rounded-circle me-2" width="50" />
+                            <p class="fw-bold mb-0">@User.Identity.Name</p>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" name="comment" id="comment" rows="3" placeholder="Add a comment..."></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="submit" value="Post">Post Comment</button>
+                    }
+                </div>
+
+                <div class="col-md-6">
+                    @if (Model.Comments.Count > 0)
+
+                    {
+                        <h3 class="text-secondary">Previous Comments</h3>
+                        @foreach (var i in Model.Comments)
+
+                        {
+                            <div class="card my-2">
+                                <div class="card-body p-2">
+                                    <p class="mb-0"><i class="fa-solid fa-comment me-2"></i>@i.comment</p>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    else
+
+                    {
+                        <p>No comments yet. Be the first to comment!</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
